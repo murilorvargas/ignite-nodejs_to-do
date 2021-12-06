@@ -25,7 +25,7 @@ function checksExistsUserAccount(request, response, next) {
 
 app.post("/users", (request, response) => {
   const { name, username } = request.body;
-  const userAlreadyExist = customers.some(c => c.cpf === cpf)
+  const userAlreadyExist = users.some(c => c.username === username)
 
   users.push({
     id: uuidv4(),
