@@ -25,7 +25,7 @@ function checksExistsUserAccount(request, response, next) {
 
 app.post("/users", (request, response) => {
   const { name, username } = request.body;
-  const userAlreadyExist = users.some((c) => c.username === username);
+  const userAlreadyExist = users.some((u) => u.username === username);
 
   users.push({
     id: uuidv4(),
@@ -79,7 +79,17 @@ app.put("/todos/:id", checksExistsUserAccount, (request, response) => {
 });
 
 app.patch("/todos/:id/done", checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { user } = request;
+  const { id } = request.params;
+  const todo = user.todos.find((t) => t.id === id);
+
+  if (!todo) {
+    return response.status(404).json({ error: "To do not found" });
+  }
+
+  todo.done = true;
+
+  return response.status(201).json(todo);
 });
 
 app.delete("/todos/:id", checksExistsUserAccount, (request, response) => {
